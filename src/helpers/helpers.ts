@@ -98,3 +98,8 @@ export const debounce = (func: (arg0: any) => void, wait = 1000) => {
 		timeout = setTimeout(later, wait);
 	};
 };
+
+export const getColorNameWithIndex = (index: number): string => {
+	const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger'];
+	return colors[index % colors.length];
+};

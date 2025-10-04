@@ -344,7 +344,6 @@ Desktop.ini
 storybook-static/
 
 ### VisualStudioCode ###
-.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -459,3 +458,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/storybookjs,windows,macos,webstorm+all,visualstudiocode,openframeworks+visualstudio,intellij+all,git,yarn,node
 node_modules
+config.bat

@@ -215,19 +215,30 @@ const  USER_MANAGEMENT={
 
 }
 
+const REPORTED_USERS ={
+	REPORTED_USER:lazy(()=>import('../pages/presentation/reported_users/reported_users'))
+}
+
+
+
 
 
 const  MATCHMAKINGTOOLS={
+	Interest_Management:lazy(()=>import('../pages/presentation/Interest_Management/Interest_Management')),
 	compatibility_quizzes:lazy(()=>import('../pages/presentation/Compatibility_Quizzes/Compatibility_quizzes')),
 	Search_Filter_Customization:lazy(()=>import('../pages/presentation/Search_filter_customization/Search_filter_List'))
- 
+}
 
+const ADMINPROFILE = {
+	Profile: lazy(() => import('../pages/presentation/Admin_Profile/Profile')),
+	Settings: lazy(() => import('../pages/presentation/Admin_Profile/Settings')),
+	ModeManagement: lazy(() => import('../pages/presentation/Admin_Profile/ModeManagement'))
 }
 
 const  SUBSCRIPTION={
 	SUBSCRIPTION:lazy(()=>import('../pages/presentation/Subscription_plans/Subscription_list')),
-	
-	FINANCIALREPORTING:lazy(()=>import('../pages/presentation/Financial Management/FinancialReporting'))
+	FINANCIALREPORTING:lazy(()=>import('../pages/presentation/Financial Management/FinancialReporting')),
+	INAPPPURCHASETRACKING:lazy(()=>import('../pages/presentation/Financial_Management/InAppPurchaseTracking'))
 }
 const  INTEREST={
 	INTEREST:lazy(()=>import('../pages/presentation/Interest/my_interest'))
@@ -284,6 +295,10 @@ const presentation: RouteProps[] = [
 
 	// Matchmaking_Tools
 	{
+		path: dashboardPagesMenu.Matchmaking_Tools.subMenu.Interest_Management.path,
+		element:<MATCHMAKINGTOOLS.Interest_Management/>
+	},
+	{
 		path: dashboardPagesMenu.Matchmaking_Tools.subMenu.Search_Filter_Customization.path,
 		element:<MATCHMAKINGTOOLS.Search_Filter_Customization/>
 	},
@@ -310,6 +325,10 @@ const presentation: RouteProps[] = [
 	path: dashboardPagesMenu.financial_management.subMenu.financial_reporting.path,
 	element: <SUBSCRIPTION.FINANCIALREPORTING />,
 },
+{
+	path: dashboardPagesMenu.financial_management.subMenu.in_app_purchase_tracking.path,
+	element: <SUBSCRIPTION.INAPPPURCHASETRACKING />,
+},
 
 	// INTEREST
 	{
@@ -317,10 +336,10 @@ const presentation: RouteProps[] = [
 		element:<INTEREST.INTEREST/>
 	},
 	// REPORTED_USERS
-	// {
-	// 	path: dashboardPagesMenu.reported_users.path,
-	// 	element:<REPORTED_USERS.REPORTED_USERS/>
-	// },
+	{
+		path: dashboardPagesMenu.user_management.subMenu.reported_users.path,
+		element:<REPORTED_USERS.REPORTED_USER/>
+	},
 	// PAYMENTS_TRANSACTIONS
 	// {
     //    path:dashboardPagesMenu.paymentsTransactions.path,
@@ -1006,6 +1025,20 @@ const documentation: RouteProps[] = [
 	{
 		path: componentPagesMenu.hooks.path,
 		element: <EXTRA.HOOKS />,
+	},
+
+	// Admin Profile Routes
+	{
+		path: dashboardPagesMenu.admin_profile.subMenu.profile.path,
+		element:<ADMINPROFILE.Profile/>
+	},
+	{
+		path: dashboardPagesMenu.admin_profile.subMenu.settings_configuration.path,
+		element:<ADMINPROFILE.Settings/>
+	},
+	{
+		path: dashboardPagesMenu.admin_profile.subMenu.mode_management.path,
+		element:<ADMINPROFILE.ModeManagement/>
 	},
 ];
 const contents = [...presentation, ...documentation];

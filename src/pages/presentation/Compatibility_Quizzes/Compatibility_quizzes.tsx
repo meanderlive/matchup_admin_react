@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
- 
+
 import { useDispatch, useSelector } from 'react-redux';
-  
+
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import SubHeader, {
 	SubHeaderLeft,
@@ -26,20 +26,20 @@ import Dropdown, {
 	DropdownMenu,
 	DropdownToggle,
 } from '../../../components/bootstrap/Dropdown';
- 
+
 import PAYMENTS from '../../../common/data/enumPaymentMethod';
 import useSortableData from '../../../hooks/useSortableData';
- 
+
 import { getColorNameWithIndex } from '../../../common/data/enumColors';
 import useDarkMode from '../../../hooks/useDarkMode';
- 
+
 import Add from './ADD';
 import Edit_User from './Edit_Quizzes';
 import OrderDeleteModal from './Delete_Quizzes';
-import {   setPage } from '../../../redux/Slice/UserManagement_slice';
+import { setPage } from '../../../redux/Slice/UserManagement_slice';
 
 import ActiveUser from './ActiveUser';
- 
+
 import { getAllCompatibilityApis } from '../../../redux/Slice/CompatibilitySlice';
 
 const UserManagement = () => {
@@ -54,7 +54,7 @@ const UserManagement = () => {
 	const [deleteId, setDeleteid] = useState<any>('')
 	const [editId, setEditId] = useState<any>('')
 
- 
+
 	const [filterData, setFilterData] = useState<any>({
 		gender: '',
 		minAge: '',
@@ -63,11 +63,11 @@ const UserManagement = () => {
 	})
 
 
- 
 
-	 
+
+
 	const handleStatus = async (idedi: any, status: any) => {
- 
+
 	}
 
 	const modeid = localStorage.getItem('modeid')
@@ -76,13 +76,13 @@ const UserManagement = () => {
 	useEffect(() => {
 		dispatch(setPage(currentPage) as any)
 
-		dispatch(	getAllCompatibilityApis(modeid) as any)
+		dispatch(getAllCompatibilityApis(modeid) as any)
 	}, [dispatch, modeid, currentPage])
 
 	const compatibility: any = useSelector((state: any) => state.compatibility?.Compatibility?.data)
 
 	// const dataa = compatibility?.users?.data
- 
+
 
 
 
@@ -100,23 +100,23 @@ const UserManagement = () => {
 	});
 
 
- 
+
 
 	const filteredData = compatibility ? compatibility.filter((f: any) =>
-		f.question.toLowerCase().includes(formik.values.searchInput.toLowerCase()) 
+		f.question.toLowerCase().includes(formik.values.searchInput.toLowerCase())
 	) : [];
 	const { items, requestSort, getClassNamesFor } = useSortableData(filteredData);
 
-	 
 
-	 
- 
+
+
+
 
 
 	return (
 		<PageWrapper title={demoPagesMenu.crm.subMenu.customersList.text}>
 			<span className='display-5 fw-bold my-3 mx-3 ' >Compatibility Quizzes Management</span>
-			 
+
 			<SubHeader>
 				<SubHeaderLeft>
 					<label
@@ -135,7 +135,7 @@ const UserManagement = () => {
 				</SubHeaderLeft>
 				<SubHeaderRight>
 
-	 
+
 
 
 
@@ -171,21 +171,21 @@ const UserManagement = () => {
 											</th>
 											<th  >
 												Answer A
-											 </th>
-											<th   
-											 >Answer B
-											 </th>
-											<th   
-											 >Answer C </th>
-											<th  
-											 >  Answer d </th>
-											 
-											<th  
-												 > Status
-											 
+											</th>
+											<th
+											>Answer B
+											</th>
+											<th
+											>Answer C </th>
+											<th
+											>  Answer d </th>
+
+											<th
+											> Status
+
 											</th>
 											<th> Action</th>
-											 
+
 											<td />
 										</tr>
 									</thead>
@@ -200,19 +200,19 @@ const UserManagement = () => {
 																<div
 																	className='ratio ratio-1x1 me-3'
 																	style={{ width: 48 }}>
-																 
-																		  <div
-																			className={`bg-l${darkModeStatus
-																					? 'o25'
-																					: '25'
-																				}-${getColorNameWithIndex(index,
-																				)} text-${getColorNameWithIndex(index,
-																				)} rounded-2 d-flex align-items-center justify-content-center`}>
-																			<span className='fw-bold'>
-																				{getFirstLetter(itemss?.question)}
-																			</span>
-																		</div>
-																 
+
+																	<div
+																		className={`bg-l${darkModeStatus
+																			? 'o25'
+																			: '25'
+																			}-${getColorNameWithIndex(index,
+																			)} text-${getColorNameWithIndex(index,
+																			)} rounded-2 d-flex align-items-center justify-content-center`}>
+																		<span className='fw-bold'>
+																			{getFirstLetter(itemss?.question)}
+																		</span>
+																	</div>
+
 
 
 																</div>
@@ -235,7 +235,7 @@ const UserManagement = () => {
 														{itemss?.answer[1]}
 
 													</td>
-													 <td>
+													<td>
 														{itemss?.answer[2]}
 													</td>
 													<td>
@@ -285,7 +285,7 @@ const UserManagement = () => {
 															</DropdownMenu>
 														</Dropdown>
 													</td>
-													 
+
 													<td>
 														<Dropdown>
 															<DropdownToggle hasIcon={false}>
@@ -298,7 +298,7 @@ const UserManagement = () => {
 																/>
 															</DropdownToggle>
 															<DropdownMenu isAlignmentEnd>
-																 
+
 																<DropdownItem>
 																	<Button
 																		icon='Edit'

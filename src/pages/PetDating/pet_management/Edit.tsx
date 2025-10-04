@@ -172,38 +172,87 @@ style={{ display: 'flex', justifyContent: 'center' }}>
 			border: '1px solid gray',
 			width: '120px',
 			height: '120px',
-			// borderRadius: '50%',
-			backgroundImage: `url(${img})`,
+			borderRadius: '10px',
 			backgroundSize: 'cover',
 			backgroundPosition: 'center',
+			position: 'relative'
 		}}>
-			{avatarFil && (
-				<img
-					src={URL.createObjectURL(avatarFil) || ''}
-					alt='Avatar Preview'
-					style={{
-						width: '100%',
-						height: '100%',
-						// borderRadius: '50%',	
-					}}
-				/>)}
-					<input
-				type='file'
-				accept='image/'
-				id='avatarInput'
-				name='image'
+		{avatarFil ? (
+			<img
+				src={URL.createObjectURL(avatarFil)}
+				alt='Avatar Preview'
 				style={{
 					width: '100%',
 					height: '100%',
-					opacity: 0, 
-					cursor: 'pointer',
+					borderRadius: '10px',
+					objectFit: 'cover'
 				}}
-				value={formik.values.image}
-				onChange={(e: any) => handleAvatarChang(e)}
-			/> 
-			 
-			<p className='mt-3'> Click on Image</p>
-	</div>
+			/>
+		) : editData?.image ? (
+			<img
+				src={`https://datingapi.meander.software/assets/images/${editData.image}`}
+				alt='Avatar Preview'
+				style={{
+					width: '100%',
+					height: '100%',
+					borderRadius: '10px',
+					objectFit: 'cover'
+				}}
+				onError={(e) => {
+					// Hide image on error and show fallback
+					e.currentTarget.style.display = 'none';
+					e.currentTarget.nextElementSibling?.classList.remove('d-none');
+				}}
+			/>
+		) : (
+			<img
+				src={img}
+				alt='Default Pet Image'
+				style={{
+					width: '100%',
+					height: '100%',
+					borderRadius: '10px',
+					objectFit: 'cover'
+				}}
+			/>
+		)}
+		<div
+			className={`d-flex align-items-center justify-content-center ${avatarFil || editData?.image ? 'd-none' : ''}`}
+			style={{
+				position: 'absolute',
+				top: '50%',
+				left: '50%',
+				transform: 'translate(-50%, -50%)',
+				width: '100%',
+				height: '100%',
+				borderRadius: '10px',
+				backgroundColor: 'rgba(0,0,0,0.3)',
+				color: 'white',
+				fontSize: '12px',
+				textAlign: 'center',
+				padding: '10px'
+			}}>
+			<span>Pet Image</span>
+		</div>
+		<input
+			type='file'
+			accept='image/'
+			id='avatarInput'
+			name='image'
+			style={{
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: '100%',
+				height: '100%',
+				opacity: 0, 
+				cursor: 'pointer',
+				borderRadius: '10px'
+			}}
+			onChange={(e: any) => handleAvatarChang(e)}
+		/> 
+		<p className='mt-3 text-center' style={{marginTop: '130px !important'}}>Click on Image</p>
+</div>
 </label>
 </FormGroup>
 			<FormGroup id='petName' label='Name *' className='col-md-12'>

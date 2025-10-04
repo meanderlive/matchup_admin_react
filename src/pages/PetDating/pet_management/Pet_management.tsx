@@ -100,7 +100,7 @@ const PetManagement = () => {
 
 
 	const filteredData = statePet ? statePet.filter((f: any) =>
-		f.petName.toLowerCase().includes(formik.values.searchInput.toLowerCase())  
+		f.petName?.toLowerCase().includes(formik.values.searchInput.toLowerCase())  
 	) : [];
 	const { items, requestSort, getClassNamesFor } = useSortableData(filteredData.reverse());
 
