@@ -47,7 +47,8 @@ import ActiveUser from './ActiveUser';
 import { updatestatus } from '../../../redux/Api/UserManagement';
 import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
-import imgback from '../../../assets/back (3).png'
+import imgback from '../../../assets/back (3).png';
+import UserProfileOverview from './UserProfileOverview';
 
 const UserManagement = () => {
 	const { darkModeStatus } = useDarkMode();
@@ -63,12 +64,31 @@ const UserManagement = () => {
 
 	const [viewUser, setViewUser] = useState<any>(false)
 	const [viewData, setViewdata] = useState<any>('')
+	const [showProfileOverview, setShowProfileOverview] = useState(false)
+	const [selectedUserForOverview, setSelectedUserForOverview] = useState<any>(null)
 	const [filterData, setFilterData] = useState<any>({
 		gender: '',
 		minAge: '',
 		maxAge: '',
-
+		registrationDate: '',
+		profileType: '',
+		verificationStatus: '',
+		accountStatus: '',
+		location: '',
+		username: '',
+		email: '',
+		suspended: '',
+		deleted: '',
+		profileVisibility: '',
+		subscriptionStatus: '',
+		lastLoginDate: '',
+		activityLevel: ''
 	})
+	
+	// Bulk actions state
+	const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
+	const [selectAll, setSelectAll] = useState(false);
+	const [bulkActionModal, setBulkActionModal] = useState(false);
 
 
 	const handleFilterData = (e: any) => {
@@ -117,10 +137,15 @@ const UserManagement = () => {
 
 
 
-	const filteredData = reversedDataa ? reversedDataa.filter((f: any) =>
-		f.name.toLowerCase().includes(formik.values.searchInput.toLowerCase()) &&
-		f.email.toLowerCase().includes(formik.values.searchInput.toLowerCase())
-	) : [];
+	const filteredData = reversedDataa ? reversedDataa.filter((f: any) => {
+		const searchTerm = searchUser.toLowerCase();
+		return (
+			f.name?.toLowerCase().includes(searchTerm) ||
+			f.email?.toLowerCase().includes(searchTerm) ||
+			f.address?.toLowerCase().includes(searchTerm) ||
+			f.phoneNumber?.includes(searchTerm)
+		);
+	}) : [];
 	const { items, requestSort, getClassNamesFor } = useSortableData(filteredData.reverse());
 
 	const handleSearch = (e: any) => {
@@ -136,8 +161,73 @@ const UserManagement = () => {
 	}
 
 	const handleFilter = () => {
-
 		dispatch(searchUserbyAges(filterData) as any)
+	}
+
+	// Bulk actions handlers
+	const handleSelectUser = (userId: string) => {
+		if (selectedUsers.includes(userId)) {
+			setSelectedUsers(selectedUsers.filter(id => id !== userId));
+		} else {
+			setSelectedUsers([...selectedUsers, userId]);
+		}
+	}
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedUsers([]);
+		} else {
+			const allUserIds = reversedDataa ? reversedDataa.map((user: any) => user._id) : [];
+			setSelectedUsers(allUserIds);
+		}
+		setSelectAll(!selectAll);
+	}
+
+	const handleViewProfileOverview = (user: any) => {
+		setSelectedUserForOverview(user);
+		setShowProfileOverview(true);
+	};
+
+	const handleBulkAction = (action: string) => {
+		if (selectedUsers.length === 0) return;
+		
+		switch (action) {
+			case 'delete':
+				// Handle bulk delete
+				console.log('Bulk delete users:', selectedUsers);
+				break;
+			case 'block':
+				// Handle bulk block
+				console.log('Bulk block users:', selectedUsers);
+				break;
+			case 'notify':
+				// Handle bulk notification
+				console.log('Bulk notify users:', selectedUsers);
+				break;
+			case 'activate':
+				// Handle bulk activate
+				console.log('Bulk activate users:', selectedUsers);
+				break;
+			case 'suspend':
+				// Handle bulk suspend
+				console.log('Bulk suspend users:', selectedUsers);
+				break;
+			case 'verify':
+				// Handle bulk verify
+				console.log('Bulk verify users:', selectedUsers);
+				break;
+			case 'premium':
+				// Handle bulk upgrade to premium
+				console.log('Bulk upgrade to premium:', selectedUsers);
+				break;
+			case 'export':
+				// Handle bulk export data
+				console.log('Bulk export data:', selectedUsers);
+				break;
+		}
+		setBulkActionModal(false);
+		setSelectedUsers([]);
+		setSelectAll(false);
 	}
 
 
@@ -172,7 +262,7 @@ const UserManagement = () => {
 						id='searchInput'
 						type='search'
 						className='border-0 shadow-none bg-transparent'
-						placeholder='Search customer...'
+						placeholder='Search by username, email, location, name...'
 						onChange={(e) => handleSearch(e)}
 						value={searchUser}
 					/>
@@ -193,13 +283,14 @@ const UserManagement = () => {
 								<form className='row g-3' onSubmit={formik.handleSubmit}>
 									<div className='col-12'>
 										<FormGroup>
-											<Label htmlFor='minAge'>Age</Label>
+											<Label htmlFor='minAge'>Age Range</Label>
 											<InputGroup>
 												<Input
 													id='minAge'
 													name='minAge'
 													ariaLabel='Minimum age'
-													placeholder='Min.'
+													placeholder='Min Age'
+													type='number'
 													onChange={handleFilterData}
 													value={filterData.minAge}
 												/>
@@ -208,7 +299,8 @@ const UserManagement = () => {
 													id='maxAge'
 													name='maxAge'
 													ariaLabel='Maximum age'
-													placeholder='Max.'
+													placeholder='Max Age'
+													type='number'
 													onChange={handleFilterData}
 													value={filterData.maxAge}
 												/>
@@ -222,7 +314,7 @@ const UserManagement = () => {
 												id='gender'
 												name='gender'
 												ariaLabel='Gender'
-												placeholder='Gender Name'
+												placeholder='Select Gender'
 												list={[
 													{ value: 'male', text: 'Male' },
 													{ value: 'female', text: 'Female' },
@@ -231,6 +323,194 @@ const UserManagement = () => {
 												onChange={handleFilterData}
 												value={filterData.gender}
 											/>
+										</FormGroup>
+									</div>
+									<div className='col-12'>
+										<FormGroup>
+											<Label htmlFor='profileType'>Profile Type</Label>
+											<Select
+												id='profileType'
+												name='profileType'
+												ariaLabel='Profile Type'
+												placeholder='Select Profile Type'
+												list={[
+													{ value: 'free', text: 'Free' },
+													{ value: 'subscribed', text: 'Subscribed' },
+													{ value: 'premium', text: 'Premium' },
+												]}
+												onChange={handleFilterData}
+												value={filterData.profileType}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-12'>
+										<FormGroup>
+											<Label htmlFor='accountStatus'>Account Status</Label>
+											<Select
+												id='accountStatus'
+												name='accountStatus'
+												ariaLabel='Account Status'
+												placeholder='Select Account Status'
+												list={[
+													{ value: 'active', text: 'Active' },
+													{ value: 'inactive', text: 'Inactive' },
+													{ value: 'blocked', text: 'Blocked' },
+													{ value: 'suspended', text: 'Suspended' },
+													{ value: 'deleted', text: 'Deleted' },
+												]}
+												onChange={handleFilterData}
+												value={filterData.accountStatus}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-12'>
+										<FormGroup>
+											<Label htmlFor='verificationStatus'>Verification Status</Label>
+											<Select
+												id='verificationStatus'
+												name='verificationStatus'
+												ariaLabel='Verification Status'
+												placeholder='Select Verification Status'
+												list={[
+													{ value: 'verified', text: 'Verified' },
+													{ value: 'unverified', text: 'Unverified' },
+													{ value: 'pending', text: 'Pending' },
+												]}
+												onChange={handleFilterData}
+												value={filterData.verificationStatus}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-12'>
+										<FormGroup>
+											<Label htmlFor='registrationDate'>Registration Date</Label>
+											<Input
+												id='registrationDate'
+												name='registrationDate'
+												type='date'
+												onChange={handleFilterData}
+												value={filterData.registrationDate}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-12'>
+										<FormGroup>
+											<Label htmlFor='location'>Location</Label>
+											<Input
+												id='location'
+												name='location'
+												placeholder='Enter location'
+												onChange={handleFilterData}
+												value={filterData.location}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='username'>Username</Label>
+											<Input
+												id='username'
+												name='username'
+												placeholder='Enter username'
+												onChange={handleFilterData}
+												value={filterData.username}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='suspended'>Suspended Status</Label>
+											<Select
+												id='suspended'
+												name='suspended'
+												placeholder='Select Status'
+												ariaLabel='Suspended Status'
+												value={filterData.suspended}
+												onChange={handleFilterData}>
+												<option value=''>All</option>
+												<option value='true'>Suspended</option>
+												<option value='false'>Not Suspended</option>
+											</Select>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='deleted'>Deleted Status</Label>
+											<Select
+												id='deleted'
+												name='deleted'
+												placeholder='Select Status'
+												ariaLabel='Deleted Status'
+												value={filterData.deleted}
+												onChange={handleFilterData}>
+												<option value=''>All</option>
+												<option value='true'>Deleted</option>
+												<option value='false'>Active</option>
+											</Select>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='profileVisibility'>Profile Visibility</Label>
+											<Select
+												id='profileVisibility'
+												name='profileVisibility'
+												placeholder='Select Visibility'
+												ariaLabel='Profile Visibility'
+												value={filterData.profileVisibility}
+												onChange={handleFilterData}>
+												<option value=''>All</option>
+												<option value='public'>Public</option>
+												<option value='private'>Private</option>
+												<option value='friends'>Friends Only</option>
+											</Select>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='subscriptionStatus'>Subscription Status</Label>
+											<Select
+												id='subscriptionStatus'
+												name='subscriptionStatus'
+												placeholder='Select Subscription'
+												ariaLabel='Subscription Status'
+												value={filterData.subscriptionStatus}
+												onChange={handleFilterData}>
+												<option value=''>All</option>
+												<option value='free'>Free</option>
+												<option value='premium'>Premium</option>
+												<option value='gold'>Gold</option>
+											</Select>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='lastLoginDate'>Last Login Date</Label>
+											<Input
+												id='lastLoginDate'
+												name='lastLoginDate'
+												type='date'
+												onChange={handleFilterData}
+												value={filterData.lastLoginDate}
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-md-6 mb-3'>
+										<FormGroup>
+											<Label htmlFor='activityLevel'>Activity Level</Label>
+											<Select
+												id='activityLevel'
+												name='activityLevel'
+												placeholder='Select Activity Level'
+												ariaLabel='Activity Level'
+												value={filterData.activityLevel}
+												onChange={handleFilterData}>
+												<option value=''>All</option>
+												<option value='high'>High</option>
+												<option value='medium'>Medium</option>
+												<option value='low'>Low</option>
+												<option value='inactive'>Inactive</option>
+											</Select>
 										</FormGroup>
 									</div>
 
@@ -257,12 +537,104 @@ const UserManagement = () => {
 
 
 					<SubheaderSeparator />
+					
+					{/* Bulk Actions */}
+					{selectedUsers.length > 0 && (
+						<>
+							<Dropdown>
+								<DropdownToggle hasIcon={false}>
+									<Button 
+										icon='MoreVert'
+										color='warning'
+										isLight>
+										Bulk Actions ({selectedUsers.length})
+									</Button>
+								</DropdownToggle>
+								<DropdownMenu isAlignmentEnd>
+									<DropdownItem>
+										<Button
+											icon='Notifications'
+											color='info'
+											isLight
+											onClick={() => handleBulkAction('notify')}>
+											Send Notifications
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='Block'
+											color='warning'
+											isLight
+											onClick={() => handleBulkAction('block')}>
+											Block Users
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='CheckCircle'
+											color='success'
+											isLight
+											onClick={() => handleBulkAction('activate')}>
+											Activate Users
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='VisibilityOff'
+											color='secondary'
+											isLight
+											onClick={() => handleBulkAction('suspend')}>
+											Suspend Users
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='Verified'
+											color='primary'
+											isLight
+											onClick={() => handleBulkAction('verify')}>
+											Verify Users
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='Star'
+											color='warning'
+											isLight
+											onClick={() => handleBulkAction('premium')}>
+											Upgrade to Premium
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='Download'
+											color='dark'
+											isLight
+											onClick={() => handleBulkAction('export')}>
+											Export Data
+										</Button>
+									</DropdownItem>
+									<DropdownItem>
+										<Button
+											icon='Delete'
+											color='danger'
+											isLight
+											onClick={() => handleBulkAction('delete')}>
+											Delete Users
+										</Button>
+									</DropdownItem>
+								</DropdownMenu>
+							</Dropdown>
+							<SubheaderSeparator />
+						</>
+					)}
+					
 					<Button
 						icon='PersonAdd'
 						color='primary'
 						isLight
 						onClick={() => setEditModalStatus(true)}>
-						New User
+						Create Account
 					</Button>
 				</SubHeaderRight>
 			</SubHeader>
@@ -274,10 +646,17 @@ const UserManagement = () => {
 								<table className='table table-modern table-hover'>
 									<thead>
 										<tr>
+											<th>
+												<Checks
+													id='selectAll'
+													name='selectAll'
+													value={selectAll ? 'true' : 'false'}
+													onChange={handleSelectAll}
+													label='Select All'
+												/>
+											</th>
 											<th
 												onClick={() => requestSort('name')}
-												// onClick={()=> {aaa(data, 'name', 'ascending')}}
-
 												className='cursor-pointer text-decoration-underline'>
 												User{' '}
 												<Icon
@@ -357,32 +736,47 @@ const UserManagement = () => {
 											dataPagination(items, currentPage, perPage).map((itemss: any, index: any) => {
 												return <tr key={itemss?._id}>
 													<td>
+														<Checks
+															id={`select-${itemss._id}`}
+															name={`select-${itemss._id}`}
+															value={selectedUsers.includes(itemss._id) ? 'true' : 'false'}
+															onChange={() => handleSelectUser(itemss._id)}
+														/>
+													</td>
+													<td>
 														<div className='d-flex align-items-center'>
 															<div className='flex-shrink-0'>
 																<div
 																	className='ratio ratio-1x1 me-3'
 																	style={{ width: 48 }}>
-																	{
-																		itemss?.mainAvatar ? <img
+																	{itemss?.mainAvatar ? (
+																		<img
 																			src={`https://datingapi.meander.software/assets/images/${itemss.mainAvatar}`}
-																			alt='image not fatch'
+																			alt='User Avatar'
 																			style={{
 																				width: '100%',
 																				height: '100%',
-																				borderRadius: '30%'
+																				borderRadius: '30%',
+																				objectFit: 'cover'
 																			}}
-																		/> : <div
-																			className={`bg-l${darkModeStatus
-																				? 'o25'
-																				: '25'
-																				}-${getColorNameWithIndex(index,
-																				)} text-${getColorNameWithIndex(index,
-																				)} rounded-2 d-flex align-items-center justify-content-center`}>
-																			<span className='fw-bold'>
-																				{getFirstLetter(itemss?.name)}
-																			</span>
-																		</div>
-																	}
+																			onError={(e) => {
+																				// Hide image on error and show fallback
+																				e.currentTarget.style.display = 'none';
+																				e.currentTarget.nextElementSibling?.classList.remove('d-none');
+																			}}
+																		/>
+																	) : null}
+																	<div
+																		className={`bg-l${darkModeStatus
+																			? 'o25'
+																			: '25'
+																			}-${getColorNameWithIndex(index,
+																			)} text-${getColorNameWithIndex(index,
+																			)} rounded-2 d-flex align-items-center justify-content-center ${itemss?.mainAvatar ? 'd-none' : ''}`}>
+																		<span className='fw-bold'>
+																			{getFirstLetter(itemss?.name || 'U')}
+																		</span>
+																	</div>
 
 
 																</div>
@@ -551,6 +945,16 @@ const UserManagement = () => {
 																</DropdownItem>
 																<DropdownItem>
 																	<Button
+																		icon='PersonSearch'
+																		color='info'
+																		isLight
+																		onClick={() => handleViewProfileOverview(itemss)}
+																	>
+																		Profile Overview
+																	</Button>
+																</DropdownItem>
+																<DropdownItem>
+																	<Button
 																		icon='Edit'
 																		tag='a'
 																		// to={`../${demoPagesMenu.crm.subMenu.customerID.path}/${i.id}`}
@@ -606,6 +1010,17 @@ const UserManagement = () => {
 
 			{editId && <Edit_User setIsOpen={setEditModal} isOpen={editModal} editData={editData} editId={editId} id="0" />}
 			{deleteId && <OrderDeleteModal setIsOpen={setDeleteModal} isOpen={deleteModal} deleteId={deleteId} id="0" />}
+			
+			{/* User Profile Overview Modal */}
+			{showProfileOverview && (
+				<UserProfileOverview
+					userData={selectedUserForOverview}
+					onClose={() => {
+						setShowProfileOverview(false);
+						setSelectedUserForOverview(null);
+					}}
+				/>
+			)}
 		</PageWrapper>
 	);
 };

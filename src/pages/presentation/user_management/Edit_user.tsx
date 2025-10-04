@@ -185,44 +185,54 @@ const EditUser: FC<ICustomerEditModalProps> = ({ id, isOpen, editId, editData, s
 										width: '120px',
 										height: '120px',
 										borderRadius: '50%',
-										// backgroundImage: `https://datingapi.meander.software/assets/images/${editData?.avatars[0]}`,
-										// backgroundImage: `https://datingapi.meander.software/assets/images/1702641146547.jpg`,
-
 										backgroundSize: 'cover',
 										backgroundPosition: 'center',
 									}}>
-									{
-										editData?.avatars ? <img
-										src={avatarFil
-											? URL.createObjectURL(avatarFil)
-											: `https://datingapi.meander.software/assets/images/${editData?.mainAvatar || 'default-image.jpg' // Provide a default image or handle accordingly
-											  }`
-										  }
-												alt='Avatar Preview'
-												style={{
-													width: '100%',
-													height: '100%',
-													borderRadius: '50%',
-												}}
-											/> :<div
+									{avatarFil ? (
+										<img
+											src={URL.createObjectURL(avatarFil)}
+											alt='Avatar Preview'
 											style={{
 												width: '100%',
 												height: '100%',
 												borderRadius: '50%',
+												objectFit: 'cover'
 											}}
-												className={`bg-l${
-													darkModeStatus
-														? 'o25'
-														: '25'
-												}-${getColorNameWithIndex(0,
-												)} text-${getColorNameWithIndex(0,
-												)} d-flex align-items-center justify-content-center`}>
-												<span className='fw-bold ' >
-													{getFirstLetter(formik.values.name)}
-												</span>
-											</div> 
-
-									}
+										/>
+									) : editData?.mainAvatar ? (
+										<img
+											src={`https://datingapi.meander.software/assets/images/${editData.mainAvatar}`}
+											alt='Avatar Preview'
+											style={{
+												width: '100%',
+												height: '100%',
+												borderRadius: '50%',
+												objectFit: 'cover'
+											}}
+											onError={(e) => {
+												// Hide image on error and show fallback
+												e.currentTarget.style.display = 'none';
+												e.currentTarget.nextElementSibling?.classList.remove('d-none');
+											}}
+										/>
+									) : null}
+									<div
+										className={`bg-l${
+											darkModeStatus
+												? 'o25'
+												: '25'
+										}-${getColorNameWithIndex(0,
+										)} text-${getColorNameWithIndex(0,
+										)} d-flex align-items-center justify-content-center ${avatarFil || editData?.mainAvatar ? 'd-none' : ''}`}
+										style={{
+											width: '100%',
+											height: '100%',
+											borderRadius: '50%',
+										}}>
+										<span className='fw-bold'>
+											{getFirstLetter(formik.values.name || editData?.name || 'U')}
+										</span>
+									</div>
 									
 											
 										

@@ -129,8 +129,12 @@ const MainProfile: FC<ICustomerEditModalProps> = ({dataaaa,setEditId,setEditModa
 				border: dataaaa?.subscription ? '5px solid #ffd700' : '5px solid gray',
                 position: 'relative', // Add this to position the pseudo-element
             }}
-            src={dataaaa?.mainAvatar ? `https://datingapi.meander.software/assets/images/${dataaaa?.mainAvatar}` :imgback }
+            src={dataaaa?.mainAvatar ? `https://datingapi.meander.software/assets/images/${dataaaa?.mainAvatar}` : imgback}
             isOnline={item.isOnline}
+            onError={(e) => {
+                // Fallback to default image if main avatar fails to load
+                e.currentTarget.src = imgback;
+            }}
         />
         { dataaaa?.subscription &&
         <div

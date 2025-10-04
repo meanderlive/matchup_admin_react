@@ -34,12 +34,12 @@ import Select from '../../../components/bootstrap/forms/Select';
 interface ICustomerEditModalProps {
 	id: string;
 	isOpen: boolean;
-	editId:any;
-	editData:any;
+	editId: any;
+	editData: any;
 	setIsOpen(...args: unknown[]): unknown;
 }
 
-const AddBlogArticlesPublishing: FC<ICustomerEditModalProps> = ({ id, isOpen,editId,editData, setIsOpen }) => {
+const AddBlogArticlesPublishing: FC<ICustomerEditModalProps> = ({ id, isOpen, editId, editData, setIsOpen }) => {
 	const itemData = id ? data.filter((item) => item.id.toString() === id.toString()) : {};
 	const item = id && Array.isArray(itemData) ? itemData[0] : {};
 	const modeid = localStorage.getItem('modeid');
@@ -55,7 +55,7 @@ const AddBlogArticlesPublishing: FC<ICustomerEditModalProps> = ({ id, isOpen,edi
 
 	});
 	useEffect(() => {
-
+console.log("running")
 
 		dispatch(fetchUser({ modeid, currentPage }) as any)
 	}, [dispatch, modeid, currentPage])
@@ -65,7 +65,7 @@ const AddBlogArticlesPublishing: FC<ICustomerEditModalProps> = ({ id, isOpen,edi
 	const currentDate = new Date();
 	const isoDateString = currentDate.toISOString();
 	const reversedDataa = stateUser?.users?.data;
-	 
+
 
 	const listuser = reversedDataa && Array.isArray(reversedDataa) ? reversedDataa.map((i: any, index: number) => ({
 		text: i.name,
@@ -80,17 +80,17 @@ const AddBlogArticlesPublishing: FC<ICustomerEditModalProps> = ({ id, isOpen,edi
 	}, ...listuser]
 
 	const formik = useFormik({
-		initialValues:     {
-			Image:editData.Image||'',
-			title:editData.title|| "",
-			description:editData.description|| "",
+		initialValues: {
+			Image: editData.Image || '',
+			title: editData.title || "",
+			description: editData.description || "",
 			publishedDate: editData.publishedDate || isoDateString,
-			modifiedDate:editData.modifiedDate|| isoDateString,
+			modifiedDate: editData.modifiedDate || isoDateString,
 			status: true,
-			user:editData?.user?._id|| '',
+			user: editData?.user?._id || '',
 			mode: modeid,
 		},
-        enableReinitialize: true,
+		enableReinitialize: true,
 
 		validationSchema: userValidation,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,23 +100,24 @@ const AddBlogArticlesPublishing: FC<ICustomerEditModalProps> = ({ id, isOpen,edi
 
 
 
-				{editId.length !== 0 ?	
-					dispatch(updateblogSlice({editId,values}) as any)
+				{
+					editId.length !== 0 ?
+					dispatch(updateblogSlice({ editId, values }) as any)
 
 					:
-				
-				
-				dispatch(createblogSlice(values) as any);
-			}		
 
 
-setTimeout(() => {
-	
-	dispatch(getallblogSlice(modeid) as any)
-}, 500);
+					dispatch(createblogSlice(values) as any);
+				}
+
+
+				setTimeout(() => {
+
+					dispatch(getallblogSlice(modeid) as any)
+				}, 500);
 				// dispatch(createblogSlice(values) as any);
 			} catch (error) {
-			}  
+			}
 			setIsOpen(false);
 			resetForm()
 			showNotification(
@@ -133,12 +134,12 @@ setTimeout(() => {
 		return (
 			<Modal isOpen={isOpen} setIsOpen={setIsOpen} size='lg' titleId={id.toString()}>
 				<ModalHeader setIsOpen={setIsOpen} className='p-4'>
-					<ModalTitle id={id}> 
-					
-					
-					{editId.length !== 0 ?	
-					'Edit Blog Articles Publishing'	:	'New Blog Articles Publishing'
-			}	                 </ModalTitle>
+					<ModalTitle id={id}>
+
+
+						{editId.length !== 0 ?
+							'Edit Blog Articles Publishing' : 'New Blog Articles Publishing'
+						}	                 </ModalTitle>
 				</ModalHeader>
 				<ModalBody className='px-4'>
 					<div className=' g-4'>
@@ -154,27 +155,18 @@ setTimeout(() => {
 						</FormGroup>
 						<FormGroup id='title' label='Title' className='col-12'>
 							<Input
+								name='title'
 								onChange={formik.handleChange}
 								value={formik.values.title}
-								isTouched={formik.touched.title as any}
-								invalidFeedback={
-									formik.errors.title as any
-								}
-								onBlur={formik.handleBlur}
-								onFocus={() => {
-									formik.setErrors({});
-								}}
-								isValid={formik.isValid}
-
 							/>
 						</FormGroup>
 						<FormGroup id='user' label='User' className='col-12'>
 							<Select
 								onChange={formik.handleChange}
-								isTouched={formik.touched.user as any} 
+								isTouched={formik.touched.user as any}
 								invalidFeedback={formik.errors.user as any}
 								onBlur={formik.handleBlur}
-								onFocus={() => {formik.setErrors({});}}
+								onFocus={() => { formik.setErrors({}); }}
 								isValid={formik.isValid}
 								value={formik.values.user}
 								id="user"
@@ -188,16 +180,19 @@ setTimeout(() => {
 						<FormGroup
 							id='description'
 							label='Description'
+						
 							className='my-5'
 							isColForLabel
 							labelClassName='col-sm-2  text-capitalize'
 							childWrapperClassName='col-sm-10'>
-							<Textarea value={formik.values.description} 
-							isTouched={formik.touched.description as any} 
-							invalidFeedback={formik.errors.description as any}
-							onBlur={formik.handleBlur}
-							onFocus={() => {formik.setErrors({});}}
-							isValid={formik.isValid} onChange={formik.handleChange} />
+							<Textarea 
+							name="description"
+							value={formik.values.description}
+								isTouched={formik.touched.description as any}
+								invalidFeedback={formik.errors.description as any}
+								onBlur={formik.handleBlur}
+								onFocus={() => { formik.setErrors({}); }}
+								isValid={formik.isValid} onChange={formik.handleChange} />
 						</FormGroup>
 
 
@@ -205,8 +200,8 @@ setTimeout(() => {
 				</ModalBody>
 				<ModalFooter className='px-4 pb-4'>
 					<Button color='info' onClick={formik.handleSubmit}>
-					{editId.length !== 0  ?	"Update":'Save'
-}					</Button>
+						{editId.length !== 0 ? "Update" : 'Save'
+						}					</Button>
 
 				</ModalFooter>
 			</Modal>

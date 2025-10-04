@@ -117,8 +117,8 @@ const UserManagement = () => {
 
 
 	const filteredData = reversedDataa ? reversedDataa.filter((f: any) =>
-		f.name.toLowerCase().includes(formik.values.searchInput.toLowerCase()) &&
-		f.email.toLowerCase().includes(formik.values.searchInput.toLowerCase())
+		f.name?.toLowerCase().includes(formik.values.searchInput.toLowerCase()) &&
+		f.email?.toLowerCase().includes(formik.values.searchInput.toLowerCase())
 	) : [];
 	const { items, requestSort, getClassNamesFor } = useSortableData(filteredData.reverse());
 

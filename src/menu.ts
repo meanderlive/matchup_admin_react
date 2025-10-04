@@ -40,9 +40,9 @@ export const dashboardPagesMenu = {
 		subMenu: null,
 		// hide:true
 	},
- 
- 
-	 
+
+
+
 	// test: {
 	// 	id: 'test',
 	// 	text: 'Test',
@@ -52,15 +52,15 @@ export const dashboardPagesMenu = {
 	// },
 	user_management: {
 		id: 'user_management',
-		text: modeid === '659ba5786881dc1bef082ee3'   ? 'Pet Management': 'User Management',
+		text: modeid === '659ba5786881dc1bef082ee3' ? 'Pet Management' : 'User Management',
 		path: 'user_management', // Add the currentPage parameter to the path
 		icon: 'Person',
-		subMenu:{
+		subMenu: {
 			profile_management: {
 				id: 'boxedSingle',
 				text: 'Profile Management',
 				path: 'profile_management',
-				icon: modeid === '659ba5786881dc1bef082ee3'   ? 'Pets': 'AccountBox',
+				icon: modeid === '659ba5786881dc1bef082ee3' ? 'Pets' : 'AccountBox',
 			},
 			Owner_management: {
 				id: 'boxedSingle',
@@ -75,22 +75,28 @@ export const dashboardPagesMenu = {
 				path: 'reported_users',
 				icon: 'Report',
 			},
-			 
+
 			Interest: {
 				id: 'my_interest',
 				text: 'Interest',
 				path: 'my_interest',
 				icon: 'FavoriteBorder',
-				 
+
 			},
 		},
-	},	
+	},
 	Matchmaking_Tools: {
 		id: 'Matchmaking_Tools',
 		text: 'Matchmaking_Tools',
 		path: 'Matchmaking_Tools', // Add the currentPage parameter to the path
 		icon: 'Compare',
-		subMenu:{
+		subMenu: {
+			Interest_Management: {
+				id: 'interestManagement',
+				text: 'Interest Management',
+				path: 'interest_management',
+				icon: 'Favorite',
+			},
 			Search_Filter_Customization: {
 				id: 'boxedSingle',
 				text: 'Search & Filter Customization',
@@ -104,13 +110,13 @@ export const dashboardPagesMenu = {
 				icon: 'Compare',
 			},
 		},
-	},	
+	},
 	financial_management: {
 		id: 'financial_management',
 		text: 'Financial Management',
 		path: 'financial_management', // Add the currentPage parameter to the path
 		icon: 'Money',
-		subMenu:{
+		subMenu: {
 			subscription_plans: {
 				id: 'subscription_plans',
 				text: 'Subscription Plans',
@@ -136,13 +142,13 @@ export const dashboardPagesMenu = {
 				icon: 'Money',
 			},
 		},
-	},	
+	},
 	content_management: {
 		id: 'content_management',
 		text: 'Content Management',
 		path: 'content_management', // Add the currentPage parameter to the path
 		icon: 'Contacts',
-		subMenu:{
+		subMenu: {
 			media_library_management: {
 				id: 'media_library_management',
 				text: 'Media Library Management',
@@ -167,7 +173,7 @@ export const dashboardPagesMenu = {
 				path: 'faq_management',
 				icon: 'FormatClear',
 			},
-			notification_editors_management : {
+			notification_editors_management: {
 				id: 'notification_editors_management',
 				text: 'Notification Editors & management ',
 				path: 'notification_editors_management',
@@ -180,52 +186,60 @@ export const dashboardPagesMenu = {
 				icon: 'LocalOffer',
 			},
 		},
-		support_help_desk: {
-			id: 'support_help_desk',
-			text: 'Support/Help Desk',
-			path: 'support_help_desk', // Add the currentPage parameter to the path
-			icon: 'SupportAgent',
-			 
-	},	
+	},
+	support_help_desk: {
+		id: 'support_help_desk',
+		text: 'Support/Help Desk',
+		path: 'support_help_desk', // Add the currentPage parameter to the path
+		icon: 'SupportAgent',
+	},
 	notification_system: {
 		id: 'notification_system',
 		text: 'Notification System',
 		path: 'notification_system', // Add the currentPage parameter to the path
 		icon: 'NotificationsActive',
-		 
-},	
+	},
+	admin_profile: {
+		id: 'admin_profile',
+		text: 'Admin Profile',
+		path: 'admin_profile', // Add the currentPage parameter to the path
+		icon: 'AdminPanelSettings',
+		subMenu: {
+			profile: {
+				id: 'adminProfile',
+				text: 'Profile',
+				path: 'admin_profile/profile',
+				icon: 'Person',
+			},
+			settings_configuration: {
+				id: 'settingsConfiguration',
+				text: 'Settings / Configuration',
+				path: 'admin_profile/settings',
+				icon: 'Settings',
+			},
+			mode_management: {
+				id: 'modeManagement',
+				text: 'Mode Management',
+				path: 'admin_profile/mode_management',
+				icon: 'DeveloperMode',
+			},
+		},
 	},
 	compliance_and_legal: {
 		id: 'compliance_and_legal',
 		text: 'Compliance and Legal',
 		path: 'compliance_and_legal', // Add the currentPage parameter to the path
 		icon: 'GppGood',
-		 
-			 
-},	
-support_help_desk: {
-	id: 'support_help_desk',
-	text: 'Support/Help Desk',
-	path: 'support_help_desk', // Add the currentPage parameter to the path
-	icon: 'SupportAgent',
-	 
-},	
-notification_system: {
-id: 'notification_system',
-text: 'Notification System',
-path: 'notification_system', // Add the currentPage parameter to the path
-icon: 'NotificationsActive',
+
 
 	},
-	
-	 
 	modes: {
 		id: 'modes',
 		text: 'modes',
 		path: 'modes',
 		icon: 'DeveloperMode',
 		subMenu: null,
-		hide :true
+		hide: true
 	},
 	// support_help_desk: {
 	// 	id: 'support_help_desk',
@@ -237,7 +251,7 @@ icon: 'NotificationsActive',
 };
 
 
-  
+
 export const demoPagesMenu = {
 	pages: {
 		id: 'pages',

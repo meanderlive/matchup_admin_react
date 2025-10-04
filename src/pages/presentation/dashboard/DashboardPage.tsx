@@ -25,6 +25,13 @@ import CommonDashboardSalesByStore from './common/CommonDashboardSalesByStore';
 import CommonDashboardWaitingAnswer from './common/CommonDashboardWaitingAnswer';
 import CommonMyWallet from '../../_common/CommonMyWallet';
 import CommonDashboardTopSeller from './common/CommonDashboardTopSeller';
+import CommonDashboardUserStatistics from './common/CommonDashboardUserStatistics';
+import CommonDashboardNewRegistrations from './common/CommonDashboardNewRegistrations';
+import CommonDashboardUserDemographics from './common/CommonDashboardUserDemographics';
+import CommonDashboardReportedContent from './common/CommonDashboardReportedContent';
+import CommonDashboardSubscriptionInsights from './common/CommonDashboardSubscriptionInsights';
+import CommonDashboardPaymentSummary from './common/CommonDashboardPaymentSummary';
+import CommonDashboardDataAnalytics from './common/CommonDashboardDataAnalytics';
 import ThemeContext from '../../../contexts/themeContext';
 
 const DashboardPage = () => {
@@ -73,6 +80,42 @@ const DashboardPage = () => {
 			</SubHeader>
 			<Page container='fluid'>
 				<div className='row'>
+					{/* User Statistics */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardUserStatistics />
+					</div>
+
+					{/* New Registrations */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardNewRegistrations />
+					</div>
+
+					{/* User Demographics */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardUserDemographics />
+					</div>
+
+					{/* Reported Content */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardReportedContent />
+					</div>
+
+					{/* Subscription Insights */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardSubscriptionInsights />
+					</div>
+
+					{/* Payment Summary */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardPaymentSummary />
+					</div>
+
+					{/* Data Analytics */}
+					<div className='col-12 mb-4'>
+						<CommonDashboardDataAnalytics />
+					</div>
+
+					{/* Legacy Components */}
 					<div className='col-12'>
 						<CommonDashboardAlert />
 					</div>
